@@ -1,0 +1,13 @@
+<div class="container"> 
+	<div class="row">
+	<div class="col-md-12">
+		<div class="jumbotron">
+			<%= form_with url: projects_create_path do |f| %>
+				<h2>Enter github url to download</h2>
+				<%= f.text_field :url ,class: "form-control input-lg" %>
+				<%=f.submit "download" %>
+			<% end %>
+		</div>
+	</div>
+	</div>
+</div>

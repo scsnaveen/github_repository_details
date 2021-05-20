@@ -57,4 +57,6 @@ gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 gem 'bootstrap'#for UI
 gem 'jquery-rails'#for jquery
 gem "font-awesome-rails"#for icons
-gem 'devise'#for user management
+gem 'devise'#for authentication
+gem 'rails_admin', '~> 2.0'#admin panel
+gem 'cancancan'#authorization

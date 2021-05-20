@@ -1,4 +1,9 @@
 Rails.application.routes.draw do
+  devise_for :admins
+  mount RailsAdmin::Engine => '/admin', as: 'rails_admin'
+  get 'projects/new'
+  post 'projects/create'
+  get 'projects/show'
   devise_for :users, controllers: { 
 		registrations: 'users/registrations', 
 		sessions: 'users/sessions'

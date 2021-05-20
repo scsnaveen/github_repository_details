@@ -1,0 +1,81 @@
+<div class="container">
+<table class="table table-bordered">
+	<thead>
+			<tr>
+				<th scope="col">Languages</th>
+			</tr>
+	</thead>
+	<tbody>
+		<%@project.languages.each do |project|%>
+		<tr>
+			<td><%=project%></td>
+		</tr>
+		<%end%>
+	</tbody>
+</table>
+<table class="table table-bordered">
+	<thead>
+			<tr>
+				<th scope="col">Models files(<%=@models.count%>)</th>
+				<th scope="col">lines</th>
+				<th scope="col">words</th>
+				<th scope="col">spaces</th>
+				<th scope="col">letters</th>
+			</tr>
+	</thead>
+	<tbody>
+		<%@models.each do |project|%>
+		<tr>
+			<td><%=project%></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+		</tr>
+		<%end%>
+	</tbody>
+</table>
+<table class="table table-bordered">
+	<thead>
+			<tr>
+				<th scope="col">Contollers files(<%=@controllers.count%>)</th>
+				<th scope="col">lines</th>
+				<th scope="col">words</th>
+				<th scope="col">spaces</th>
+				<th scope="col">letters</th>
+			</tr>
+	</thead>
+	<tbody>
+		<%@controllers.each do |controller|%>
+		<tr>
+			<td><%=controller%></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+		</tr>
+		<%end%>
+	</tbody>
+</table><table class="table table-bordered">
+	<thead>
+			<tr>
+				<th scope="col">Views files(<%=@views.count%>)</th>
+				<th scope="col">lines</th>
+				<th scope="col">words</th>
+				<th scope="col">spaces</th>
+				<th scope="col">letters</th>
+			</tr>
+	</thead>
+	<tbody>
+		<%@views.each do |view|%>
+		<tr>
+			<td><%=view%></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+		</tr>
+		<%end%>
+	</tbody>
+</table>
+</div>
