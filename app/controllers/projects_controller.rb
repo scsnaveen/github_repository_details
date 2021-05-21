@@ -19,7 +19,7 @@ class ProjectsController < ApplicationController
 		# checking if project is present in database
 		if !(Project.find_by(project_name:@project.project_name).present?)
 			# cloning into public folder 
-			system("git clone #{@project.url} #{Rails.root}/public/new/#{@project.project_name}")
+			system("git clone #{@project.url} #{Rails.root}/public/#{@project.project_name}")
 
 			# using github api to get languages
 			@url = "https://api.github.com/repos/" +@user_name+"/"+@project.project_name+"/languages"
@@ -31,7 +31,18 @@ class ProjectsController < ApplicationController
 				@project.languages << n[0]
 			end
 			@project.save
-			redirect_to projects_show_path(:id=>@project.id)
+			dir = "public/#{@project.project_name}/app/models/**/*"
+			@files =	Dir[dir]
+			@models = file_details(@files,@project.id)
+
+			dir = "public/#{@project.project_name}/app/controllers/**/*"
+			@files =	Dir[dir]
+			@controllers =	file_details(@files,@project.id)
+
+			dir = "public/#{@project.project_name}/app/views/**/*"
+			@files =	Dir[dir]
+			@views =	file_details(@files,@project.id)
+			redirect_to projects_new_path
 		else
 			@project= Project.find_by(project_name:@project.project_name)
 			redirect_to projects_show_path(:id=>@project.id)
@@ -41,23 +52,50 @@ class ProjectsController < ApplicationController
 	def show
 	@project = Project.find(params[:id])
 
-	dir = "public/new/#{@project.project_name}/app/models/**/*.rb"
-	@files =	Dir[dir]
-	@files.each do |filename|
-	   count = IO.readlines(filename).size
-	   puts "#{count} lines in #{filename}"
-	 end
-	@models =	Dir.glob(dir)
-
-	dir = "public/new/#{@project.project_name}/app/controllers/**/*.rb"
-	@controllers =	Dir.glob(dir)
-
-	dir = "public/new/#{@project.project_name}/app/views/**/*.erb"
-	@views =	Dir.glob(dir)
+	
+		# respond_to do |format|
+		# 	format.html
+		# 	format.pdf do
+		# 		# pdf = ProjectStatPdf.new(@project)
+		# 		send_data render pdf:"project id:#{@project.id}",template: "projects/show.html.erb"
+		# 		# send_data pdf.render, filename: "hello.pdf",type: "application/pdf",disposition: "inline"
+		# 	end
+		# end
 	end
-	def file_details(file)
-		
+	def file_details(files,project_id)
+		files.each do |filename|
+			# checking if it is a file
+			if File.file?(filename)
+				
+				words_count =0
+				line_word_count =[]
 
+				letters_count =0
+				line_letters_count = []
+
+				spaces_count = 0
+				line_spaces_count = []
+
+				file = File.open(filename, "r") { |file| file.each_line { |line|
+					# counting words,letters,spaces in each line
+					line_word_count << line.scan(/\w+/).size	
+					line_letters_count << line.length
+					line_spaces_count << line.count(' ')
+				}
+				# calculating lines,words and spaces of a file
+				@project_stat = ProjectStat.new()
+				@project_stat.project_id =project_id
+				# number of lines
+				@project_stat.lines = IO.readlines(filename).size 
+				@project_stat.words =line_word_count.sum
+				@project_stat.letters =line_letters_count.sum
+				@project_stat.spaces =line_spaces_count.sum
+				}
+				@project_stat.file_name = filename
+				@project_stat.save
+				
+			end
+		end
 	end
 
 	private

@@ -60,3 +60,6 @@ gem "font-awesome-rails"#for icons
 gem 'devise'#for authentication
 gem 'rails_admin', '~> 2.0'#admin panel
 gem 'cancancan'#authorization
+# gem 'wicked_pdf'
+# gem 'wkhtmltopdf-binary'
+# gem 'prawn'

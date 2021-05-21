@@ -2,13 +2,13 @@
 <table class="table table-bordered">
 	<thead>
 			<tr>
-				<th scope="col">Languages</th>
+				<th scope="col"><h3>Languages</h3></th>
 			</tr>
 	</thead>
 	<tbody>
 		<%@project.languages.each do |project|%>
 		<tr>
-			<td><%=project%></td>
+			<td><h5><%=project%></h5></td>
 		</tr>
 		<%end%>
 	</tbody>
@@ -16,21 +16,13 @@
 <table class="table table-bordered">
 	<thead>
 			<tr>
-				<th scope="col">Models files(<%=@models.count%>)</th>
-				<th scope="col">lines</th>
-				<th scope="col">words</th>
-				<th scope="col">spaces</th>
-				<th scope="col">letters</th>
+				<th scope="col"><h3>Models files(<%=@models.count%>)</h3></th>
 			</tr>
 	</thead>
 	<tbody>
 		<%@models.each do |project|%>
 		<tr>
-			<td><%=project%></td>
-			<td></td>
-			<td></td>
-			<td></td>
-			<td></td>
+			<td><h5><%=project%></h5></td>
 		</tr>
 		<%end%>
 	</tbody>
@@ -38,44 +30,29 @@
 <table class="table table-bordered">
 	<thead>
 			<tr>
-				<th scope="col">Contollers files(<%=@controllers.count%>)</th>
-				<th scope="col">lines</th>
-				<th scope="col">words</th>
-				<th scope="col">spaces</th>
-				<th scope="col">letters</th>
+				<th scope="col"><h3>Contollers files(<%=@controllers.count%>)</h3></th>
 			</tr>
 	</thead>
 	<tbody>
 		<%@controllers.each do |controller|%>
 		<tr>
-			<td><%=controller%></td>
-			<td></td>
-			<td></td>
-			<td></td>
-			<td></td>
+			<td><h5><%=controller%></h5></td>
 		</tr>
 		<%end%>
 	</tbody>
 </table><table class="table table-bordered">
 	<thead>
 			<tr>
-				<th scope="col">Views files(<%=@views.count%>)</th>
-				<th scope="col">lines</th>
-				<th scope="col">words</th>
-				<th scope="col">spaces</th>
-				<th scope="col">letters</th>
+				<th scope="col"><h3>Views files(<%=@views.count%>)</h3></th>
 			</tr>
 	</thead>
 	<tbody>
 		<%@views.each do |view|%>
 		<tr>
-			<td><%=view%></td>
-			<td></td>
-			<td></td>
-			<td></td>
-			<td></td>
+			<td><h5><%=view%></h5></td>
 		</tr>
 		<%end%>
 	</tbody>
 </table>
 </div>
+<%= link_to "DOWNLOAD PDF", projects_show_path(:id=>@project.id, format: :pdf) %>
