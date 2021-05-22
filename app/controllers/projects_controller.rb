@@ -1,5 +1,3 @@
-require 'net/http'
-require 'json'
 class ProjectsController < ApplicationController
 	def new
 		@project = Project.new
@@ -9,8 +7,7 @@ class ProjectsController < ApplicationController
 	@project = Project.new(project_params)
 	# using split for details
 	split_url = @project.url.split('/')
-	# getting github repository username
-	@user_name =split_url[3]
+
 	# getting project name with git extension
 	@name = split_url[4]
 	# removing git extension
@@ -21,27 +18,46 @@ class ProjectsController < ApplicationController
 			# cloning into public folder 
 			system("git clone #{@project.url} #{Rails.root}/public/#{@project.project_name}")
 
-			# using github api to get languages
-			@url = "https://api.github.com/repos/" +@user_name+"/"+@project.project_name+"/languages"
-			# for getting languages as json response
-			uri = URI(@url)
-			response = Net::HTTP.get(uri)
-			values = JSON.parse(response)
-			values.each do |n|
-				@project.languages << n[0]
-			end
+			dir = "#{Rails.root}/public/#{@project.project_name}/**/*"
+			@files =	Dir.glob(dir).select { |e| File.file? e }
+
+
+			model_files = "#{Rails.root}/public/#{@project.project_name}/app/models/**/*"
+			model_files_count = Dir.glob(model_files).select { |e| File.file? e }
+			@project.models_count = model_files_count.count
+
+
+			controller_files = "#{Rails.root}/public/#{@project.project_name}/app/controllers/**/*"
+			controller_files_count = Dir.glob(controller_files).select { |e| File.file? e }
+			@project.controllers_count = controller_files_count.count
+
+
+			view_files = "#{Rails.root}/public/#{@project.project_name}/app/views/**/*"
+			view_files_count = Dir.glob(view_files).select { |e| File.file? e }
+			@project.views_count = view_files_count.count
+
 			@project.save
-			dir = "public/#{@project.project_name}/app/models/**/*"
-			@files =	Dir[dir]
-			@models = file_details(@files,@project.id)
+			split_url = @project.url.split('/')
+			# getting github repository username
+			@user_name =split_url[3]
+			# using github api to get languages
+				@url = "https://api.github.com/repos/" +@user_name+"/"+@project.project_name+"/languages"
+				# for getting languages as json response
+				uri = URI(@url)
+				response = Net::HTTP.get(uri)
+				values = JSON.parse(response)
+				value =[]
+				values.each do |n|
+					value <<n[0]
+					@language = Language.new()
+						value.each do |language_value|
+						@language.project_id = @project.id
+						@language.language =  language_value
+					end
+					@language.save
+				end
+			file_details(@files,@project.id)
 
-			dir = "public/#{@project.project_name}/app/controllers/**/*"
-			@files =	Dir[dir]
-			@controllers =	file_details(@files,@project.id)
-
-			dir = "public/#{@project.project_name}/app/views/**/*"
-			@files =	Dir[dir]
-			@views =	file_details(@files,@project.id)
 			redirect_to project_stats_show_path(:id=>@project.id)
 		else
 			@project= Project.find_by(project_name:@project.project_name)
@@ -64,8 +80,6 @@ class ProjectsController < ApplicationController
 	end
 	def file_details(files,project_id)
 		files.each do |filename|
-			# checking if it is a file
-			if File.file?(filename)
 				
 				words_count =0
 				line_word_count =[]
@@ -86,20 +100,21 @@ class ProjectsController < ApplicationController
 				@project_stat = ProjectStat.new()
 				@project_stat.project_id =project_id
 				# number of lines
-				@project_stat.lines = IO.readlines(filename).size 
+				@project_stat.lines = IO.readlines(filename).size
+				# number of words 
 				@project_stat.words =line_word_count.sum
+				# number of letters
 				@project_stat.letters =line_letters_count.sum
+				# number of spaces
 				@project_stat.spaces =line_spaces_count.sum
 				}
-				@project_stat.file_name = filename
+				@project_stat.file_name = filename.split('/',8).last
 				@project_stat.save
-
-			end
 		end
 	end
 
 	private
 	def project_params
-	params.permit(:name,:url,:languages)
+	params.permit(:name,:url,:models_count,:controllers_count,:views_count)
 	end
 end
