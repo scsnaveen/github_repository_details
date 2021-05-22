@@ -61,7 +61,7 @@ gem 'devise'#for authentication
 gem 'rails_admin', '~> 2.0'#admin panel
 gem 'cancancan'#authorization
 # gem 'devise_google_authenticator', :path => 'lib/devise_google_authenticator', :require => 'devise_google_authenticator'
-# gem 'wicked_pdf'
+gem 'wicked_pdf', '~> 1.4'
 gem 'wkhtmltopdf-binary'
-gem 'pdfkit'
+# gem 'pdfkit'
 # gem 'prawn'
