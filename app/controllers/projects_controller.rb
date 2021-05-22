@@ -42,10 +42,10 @@ class ProjectsController < ApplicationController
 			dir = "public/#{@project.project_name}/app/views/**/*"
 			@files =	Dir[dir]
 			@views =	file_details(@files,@project.id)
-			redirect_to projects_new_path
+			redirect_to project_stats_show_path(:id=>@project.id)
 		else
 			@project= Project.find_by(project_name:@project.project_name)
-			redirect_to projects_show_path(:id=>@project.id)
+			redirect_to project_stats_show_path(:id=>@project.id)
 		end
 	end
 
@@ -93,7 +93,7 @@ class ProjectsController < ApplicationController
 				}
 				@project_stat.file_name = filename
 				@project_stat.save
-				
+
 			end
 		end
 	end
