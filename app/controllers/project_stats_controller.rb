@@ -15,11 +15,12 @@ class ProjectStatsController < ApplicationController
 
 		view_files = "#{Rails.root}/public/#{@project.project_name}/app/views/**/*"
 		@views = Dir.glob(view_files).select { |e| File.file? e }
-		    respond_to do |format|
+		respond_to do |format|
 		      format.html
 		      format.pdf do
-		        render pdf: "file_name",template: "project_stats/show.html.erb"   # Excluding ".pdf" extension.
+		        render pdf: "#{@project.project_name}_stat",template: "project_stats/show.html.erb"   # Excluding ".pdf" extension.
 		      end
 		    end
+
 	end
 end
