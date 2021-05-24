@@ -17,23 +17,30 @@ class ProjectsController < ApplicationController
 		if !(Project.find_by(project_name:@project.project_name).present?)
 			# cloning into public folder 
 			system("git clone #{@project.url} #{Rails.root}/public/#{@project.project_name}")
-
+			# getting project directory
 			dir = "#{Rails.root}/public/#{@project.project_name}/**/*"
-			@files =	Dir.glob(dir).select { |e| File.file? e }
+			# getting all files
+			@files =	Dir.glob(dir, File::FNM_DOTMATCH).select { |e| File.file? e }
 
-
+			# getting model files diectory
 			model_files = "#{Rails.root}/public/#{@project.project_name}/app/models/**/*"
+			# getting files from a given directory
 			model_files_count = Dir.glob(model_files).select { |e| File.file? e }
+			# getting model files count 
 			@project.models_count = model_files_count.count
 
-
+			# getting controller files directory
 			controller_files = "#{Rails.root}/public/#{@project.project_name}/app/controllers/**/*"
+			# getting files from a given directory
 			controller_files_count = Dir.glob(controller_files).select { |e| File.file? e }
+			# getting controller files count
 			@project.controllers_count = controller_files_count.count
 
-
+			# getting view files directory
 			view_files = "#{Rails.root}/public/#{@project.project_name}/app/views/**/*"
+			# getting files from a given directory
 			view_files_count = Dir.glob(view_files).select { |e| File.file? e }
+			# getting views files count
 			@project.views_count = view_files_count.count
 
 			@project.save
@@ -92,7 +99,7 @@ class ProjectsController < ApplicationController
 
 				file = File.open(filename, "r") { |file| file.each_line { |line|
 					# counting words,letters,spaces in each line
-					line_word_count << line.scan(/\w+/).size	
+					line_word_count << line.encode!('UTF-8', 'binary', invalid: :replace, undef: :replace, replace: '').scan(/\w+/).size	
 					line_letters_count << line.length
 					line_spaces_count << line.count(' ')
 				}

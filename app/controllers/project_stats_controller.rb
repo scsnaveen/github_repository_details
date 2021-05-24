@@ -18,9 +18,10 @@ class ProjectStatsController < ApplicationController
 		respond_to do |format|
             format.html
             format.pdf do
-                render pdf: "#{@project.project_name}_stat",
+               render pdf: "#{@project.project_name}_stat",
                 template: "project_stats/show.html.erb",
-                layout: "pdf.html"
+                layout: "pdf.html",
+                disposition: 'attachment'
             end
         end
 
