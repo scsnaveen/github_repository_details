@@ -31,6 +31,7 @@ class Ability
       else
         can :access, :rails_admin
         can :dashboard ,:all
+        can :read, :dashboard
 
     end
     #

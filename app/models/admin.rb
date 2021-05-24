@@ -1,10 +1,11 @@
 class Admin < ApplicationRecord
+	attr_accessor :gauth_token
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
-  devise :database_authenticatable, :registerable,
+  devise :google_authenticatable,:database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable,
          :confirmable, :lockable, :timeoutable, :trackable
-    serialize :roles, Array
+    serialize :roles
     def roles_enum
         [ 'Super Admin', 'Admin','Employee'  ]
     end

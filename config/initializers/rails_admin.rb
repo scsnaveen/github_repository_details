@@ -1,6 +1,5 @@
-require "nested_form/engine"
-require "nested_form/builder_mixin"
 require Rails.root.join('lib', 'rails_admin' , 'bulk_update.rb')
+require Rails.root.join('lib', 'rails_admin' , 'delete_override.rb')
 
 RailsAdmin.config do |config|
 
@@ -14,7 +13,6 @@ RailsAdmin.config do |config|
 
   ## == CancanCan ==
   config.authorize_with :cancancan
-  config.parent_controller = 'ApplicationController' 
 
   ## == Pundit ==
   # config.authorize_with :pundit
@@ -37,6 +35,7 @@ RailsAdmin.config do |config|
     show
     edit
     delete
+    # delete_override
     show_in_app
     bulk_update do
       only ['Project']

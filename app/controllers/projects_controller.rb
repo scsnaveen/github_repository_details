@@ -65,25 +65,29 @@ class ProjectsController < ApplicationController
 				end
 			file_details(@files,@project.id)
 
-			redirect_to project_stats_show_path(:id=>@project.id)
+			redirect_to projects_show_path(:id=>@project.id)
 		else
 			@project= Project.find_by(project_name:@project.project_name)
-			redirect_to project_stats_show_path(:id=>@project.id)
+			redirect_to projects_show_path(:id=>@project.id)
 		end
 	end
 
 	def show
 	@project = Project.find(params[:id])
 
-	
-		# respond_to do |format|
-		# 	format.html
-		# 	format.pdf do
-		# 		# pdf = ProjectStatPdf.new(@project)
-		# 		send_data render pdf:"project id:#{@project.id}",template: "projects/show.html.erb"
-		# 		# send_data pdf.render, filename: "hello.pdf",type: "application/pdf",disposition: "inline"
-		# 	end
-		# end
+	@project=Project.find(params[:id])
+		@languages = Language.where(project_id:@project.id)
+		@project_stats = ProjectStat.where(project_id: @project.id)
+
+		model_files = "#{Rails.root}/public/#{@project.project_name}/app/models/**/*"
+		@models = Dir.glob(model_files).select { |e| File.file? e } 
+
+		controller_files = "#{Rails.root}/public/#{@project.project_name}/app/controllers/**/*"
+		@controllers = Dir.glob(controller_files).select { |e| File.file? e }
+
+		view_files = "#{Rails.root}/public/#{@project.project_name}/app/views/**/*"
+		@views = Dir.glob(view_files).select { |e| File.file? e }
+
 	end
 	def file_details(files,project_id)
 		files.each do |filename|
