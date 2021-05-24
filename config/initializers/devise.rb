@@ -308,4 +308,14 @@ Devise.setup do |config|
   # When set to false, does not sign a user in automatically after their password is
   # changed. Defaults to true, so a user is signed in automatically after changing a password.
   # config.sign_in_after_change_password = true
+    # how long should the user be able to authenticate with their Google Authenticator token
+  config.ga_timeout = 3.days
+  #a multiplier which provides for drift between a user's clock (and therefore their OTP) and the system clock. This should be fine at 3.
+  config.ga_timedrift =  3
+  # how long to remember the token for before requiring another. By default this is 1 month. To disable this setting change it to ni
+  config.ga_remembertime = 1.month
+   # If you want to set a custom application name instead of using the name of the Rails app
+  config.ga_appname = 'rails'
+   # If you want to set a custom application name instead of using the name of the Rails app
+  config.ga_bypass_signup = true
 end
