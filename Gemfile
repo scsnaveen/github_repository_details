@@ -63,4 +63,5 @@ gem 'cancancan'#authorization
 gem 'devise_google_authenticator', :path => 'lib/devise_google_authenticator', :require => 'devise_google_authenticator'
 gem 'wicked_pdf', '~> 1.4'
 gem 'wkhtmltopdf-binary'
-gem "chartkick"
+# gem "chartkick"
+gem 'gruff'

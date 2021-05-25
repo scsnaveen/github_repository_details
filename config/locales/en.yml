@@ -38,3 +38,7 @@ en:
         breadcrumb: Bulk Update
         menu: Bulk update 
         bulk_link: Update for selected %{model_label_plural}
+      delete_override:
+        title: "delete override" 
+        breadcrumb: "delete override"
+        menu: "delete override"

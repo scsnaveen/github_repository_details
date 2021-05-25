@@ -1,56 +1,68 @@
 module RailsAdmin
-  module Config
-    module Actions
-      class Delete < RailsAdmin::Config::Actions::Base
-        RailsAdmin::Config::Actions.register(self)
+	module Config
+		module Actions
+			class DeleteOverride < RailsAdmin::Config::Actions::Base
 
-        register_instance_option :member do
-          true
-        end
+				RailsAdmin::Config::Actions.register(self)
 
-        register_instance_option :route_fragment do
-          'delete'
-        end
+				register_instance_option :member do
+					true
+				end
 
-        register_instance_option :http_methods do
-          [:get, :delete]
-        end
+				register_instance_option :http_methods do
+					[:get, :delete]
+				end
 
-        register_instance_option :authorization_key do
-          :destroy
-        end
+				register_instance_option :authorization_key do
+					:destroy
+				end
 
-        register_instance_option :controller do
-          proc do
-            if request.get? # DELETE
 
-              respond_to do |format|
-                format.html { render @action.template_name }
-                format.js   { render @action.template_name, layout: false }
-              end
+				register_instance_option :controller do
+					Proc.new do
+						if request.get? # DELETE
+							# redirect_path = admin_checkga_path
 
-            elsif request.delete? # DESTROY
+							respond_to do |format|
+								format.html { render @action.template_name }
+								format.js   { render @action.template_name, :layout => false }
+							end
 
-              redirect_path = nil
-              @auditing_adapter && @auditing_adapter.delete_object(@object, @abstract_model, _current_user)
-              if @object.destroy
-                flash[:success] = t('admin.flash.successful', name: @model_config.label, action: t('admin.actions.delete.done'))
-                redirect_path = index_path
-              else
-                flash[:error] = t('admin.flash.error', name: @model_config.label, action: t('admin.actions.delete.done'))
-                redirect_path = back_or_index
-              end
+						elsif request.delete? # DESTROY
+							
+							if current_admin.role =="Super Admin"
+								if current_admin.gauth_enabled == "1"
+									valid_vals = []
+									valid_vals << ROTP::TOTP.new(current_admin.gauth_secret).at(Time.now)
+									(1..current_admin.class.ga_timedrift).each do |cc|
+										valid_vals << ROTP::TOTP.new(current_admin.gauth_secret).at(Time.now.ago(30*cc))
+										valid_vals << ROTP::TOTP.new(current_admin.gauth_secret).at(Time.now.in(30*cc))
+									end
+									if valid_vals.include?(params[:token].to_i)
 
-              redirect_to redirect_path
+											@object.destroy
+											flash[:success] = t("admin.flash.successful", :name => @model_config.label, :action => t("admin.actions.delete.done"))
+											redirect_to index_path
+									else
+											flash[:error] = "Incorrect code"
+											redirect_to index_path
+									end
+								else
+									flash[:error]= "Please enable the 2FA"
+									redirect_to index_path
+								end
+							else
+								flash[:error] = "Super Admin can only delete the rows"
+								redirect_to index_path
+							end
+						end
+					end
+				end
 
-            end
-          end
-        end
-
-        register_instance_option :link_icon do
-          'icon-remove'
-        end
-      end
-    end
-  end
+				register_instance_option :link_icon do
+					'icon-remove'
+				end
+			end
+		end
+	end
 end

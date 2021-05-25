@@ -10,6 +10,7 @@ RailsAdmin.config do |config|
     warden.authenticate! scope: :admin
   end
   config.current_user_method(&:current_admin)
+  config.parent_controller = 'ApplicationController'
 
   ## == CancanCan ==
   config.authorize_with :cancancan
@@ -34,12 +35,13 @@ RailsAdmin.config do |config|
     bulk_delete
     show
     edit
-    delete
-    # delete_override
+    # delete
     show_in_app
     bulk_update do
       only ['Project']
      end
+    delete_override
+
 
     ## With an audit adapter, you can add:
     # history_index

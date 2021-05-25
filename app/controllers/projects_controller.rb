@@ -1,3 +1,4 @@
+
 class ProjectsController < ApplicationController
 	def new
 		@project = Project.new
@@ -63,6 +64,8 @@ class ProjectsController < ApplicationController
 					end
 					@language.save
 				end
+				file = "#{Rails.root}/public/#{@project.project_name}/app/controllers/**/*"
+				# method for counting lines,words,spaces and letters
 			file_details(@files,@project.id)
 
 			redirect_to projects_show_path(:id=>@project.id)
@@ -87,6 +90,11 @@ class ProjectsController < ApplicationController
 
 		view_files = "#{Rails.root}/public/#{@project.project_name}/app/views/**/*"
 		@views = Dir.glob(view_files).select { |e| File.file? e }
+		g = Gruff::Pie.new
+ 		g.data :Models,@project.models_count 
+ 		g.data :Controllers,@project.controllers_count 
+ 		g.data :Views,@project.views_count
+ 		g.write('public/graph.png')
 
 	end
 	def file_details(files,project_id)
@@ -119,6 +127,7 @@ class ProjectsController < ApplicationController
 				# number of spaces
 				@project_stat.spaces =line_spaces_count.sum
 				}
+				
 				@project_stat.file_name = filename.split('/',8).last
 				@project_stat.save
 		end
