@@ -1,0 +1,16 @@
+<div class="container">
+	<table class="table table-bordered table-striped">
+		<thead class="table-dark">
+			<tr>
+				<th scope="col"><h3>Projects</h3></th>
+			</tr>
+		</thead>
+		<tbody>
+			<%@projects.all.each do |project|%>
+			<tr>
+				<td><h5><%=link_to project.project_name,projects_show_path(:id=>project.id)%></h5></td>
+			</tr>
+			<%end%>
+		</tbody>
+	</table>
+</div>

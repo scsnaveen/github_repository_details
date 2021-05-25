@@ -12,20 +12,21 @@
 	<table class="table table-bordered">
 		<tr>
 			<th align="center">Id</th>
-			<th align="center">Project</th>
+			<th align="center">Priority</th>
 			<th align="center">Date</th>
 		</tr>
 		<% @bulk_values.each do |user| %>
 			<tr>
 					<td><%= user.id %></td>
-					<td><%= user.url %></td>
+					<td><%= user.priority %></td>
 					<td><%= user.created_at.to_s %></td>
 			</tr>
 		<% end %>
 	</table>
 	<br />
 	<div class="input-group">
-		<input type="text" name="update_value" id="update_value" class="form-control" placeholder="Enter value">
-		<button class="btn btn-outline-secondary" type="button" id="button-addon2">Submit</button>
+		<input type="text" name="update_value" id="update_value" class="form-control" placeholder="Enter value to update priority">
+
+	<input type="submit" value="Update values" />
 	</div>
 </form>

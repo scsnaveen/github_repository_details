@@ -15,6 +15,7 @@ class ProjectStatsController < ApplicationController
 
 		view_files = "#{Rails.root}/public/#{@project.project_name}/app/views/**/*"
 		@views = Dir.glob(view_files).select { |e| File.file? e }
+		#sending pdf formatted repository stat
 		respond_to do |format|
             format.pdf do
                render pdf: "#{@project.project_name}_stat",

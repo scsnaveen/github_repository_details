@@ -4,6 +4,7 @@ Rails.application.routes.draw do
   get 'projects/new'
   post 'projects/create'
   get 'projects/show'
+  get 'projects/index'
   devise_for :users, controllers: { 
 		registrations: 'users/registrations', 
 		sessions: 'users/sessions'

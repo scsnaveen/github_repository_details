@@ -31,7 +31,7 @@ module RailsAdmin
 						elsif request.delete? # DESTROY
 							
 							if current_admin.role =="Super Admin"
-								if current_admin.gauth_enabled == "1"
+								if current_admin.gauth_enabled == "1"||current_admin.gauth_enabled=="t"
 									valid_vals = []
 									valid_vals << ROTP::TOTP.new(current_admin.gauth_secret).at(Time.now)
 									(1..current_admin.class.ga_timedrift).each do |cc|

@@ -1,5 +1,7 @@
-
 class ProjectsController < ApplicationController
+	def index
+		@projects = Project.all
+	end
 	def new
 		@project = Project.new
 	end
@@ -67,6 +69,12 @@ class ProjectsController < ApplicationController
 				file = "#{Rails.root}/public/#{@project.project_name}/app/controllers/**/*"
 				# method for counting lines,words,spaces and letters
 			file_details(@files,@project.id)
+			# creating a pie chart for models,controllers and views
+			g = Gruff::Pie.new
+			g.data :Models,@project.models_count 
+			g.data :Controllers,@project.controllers_count 
+			g.data :Views,@project.views_count
+			g.write("public/#{@project.project_name}.png")
 
 			redirect_to projects_show_path(:id=>@project.id)
 		else
@@ -81,20 +89,15 @@ class ProjectsController < ApplicationController
 	@project=Project.find(params[:id])
 		@languages = Language.where(project_id:@project.id)
 		@project_stats = ProjectStat.where(project_id: @project.id)
-
+		#getting models files list
 		model_files = "#{Rails.root}/public/#{@project.project_name}/app/models/**/*"
 		@models = Dir.glob(model_files).select { |e| File.file? e } 
-
+		#getting controllers files list
 		controller_files = "#{Rails.root}/public/#{@project.project_name}/app/controllers/**/*"
 		@controllers = Dir.glob(controller_files).select { |e| File.file? e }
-
+		#getting views files list
 		view_files = "#{Rails.root}/public/#{@project.project_name}/app/views/**/*"
 		@views = Dir.glob(view_files).select { |e| File.file? e }
-		g = Gruff::Pie.new
- 		g.data :Models,@project.models_count 
- 		g.data :Controllers,@project.controllers_count 
- 		g.data :Views,@project.views_count
- 		g.write('public/graph.png')
 
 	end
 	def file_details(files,project_id)
