@@ -1,16 +1,18 @@
 <div class="container">
 	<div class="row"> 
-		<div class= "col-2">
+		<div class= "col-4">
 			<table class="table table-bordered table-striped">
 				<thead class="table-light table-dark">
 					<tr>
 						<th><h3>Languages</h3></th>
+						<th><h3>Version</h3></th>
 					</tr>
 				</thead>
 				<tbody>
 					<%@languages.each do |language|%>
 					<tr>
 						<td><h5><%=language.language%></h5></td>
+						<td><h5><%=language.version%></h5></td>
 					</tr>
 					<%end%>
 				</tbody>
@@ -22,7 +24,7 @@
 	</div>
 	<div>
 			<table class="table table-bordered table-striped">
-			<thead class="table-light table-dark">
+			<thead class="table-dark">
 				<tr>
 					<th><h3>Models(<%=@project.models_count%>)</h3></th>
 					<th><h3>Controllers(<%=@project.controllers_count%>)</h3></th>
@@ -73,3 +75,12 @@
 		</tbody>
 	</table>
 </div>
+<style type="text/css">
+
+    table {
+        table-layout: fixed;
+        word-wrap: break-word;
+    }
+
+
+</style>

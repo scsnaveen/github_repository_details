@@ -1,6 +1,7 @@
 class ProjectsController < ApplicationController
+	before_action :authenticate_user!
 	def index
-		@projects = Project.all
+		@projects = current_user.projects.all
 	end
 	def new
 		@project = Project.new
@@ -8,6 +9,7 @@ class ProjectsController < ApplicationController
 
 	def create
 	@project = Project.new(project_params)
+	@project.user_id =current_user.id
 	# using split for details
 	split_url = @project.url.split('/')
 
@@ -66,7 +68,29 @@ class ProjectsController < ApplicationController
 					end
 					@language.save
 				end
-				file = "#{Rails.root}/public/#{@project.project_name}/app/controllers/**/*"
+				# if ruby project
+				@language = Language.find_by("project_id = ? AND language = ?", @project.id, "Ruby")
+				if @language.present?
+					version = "#{Rails.root}/public/#{@project.project_name}/Gemfile"
+					@version = File.open(version, "r") { |file| file.each_line { |line|
+					# getting ruby version through line match
+					@version_line =line.match( /\bruby\b/i )
+					if @version_line.present?
+						@language.version = line.split(' ').last.gsub(/''/, '')
+						@language.save
+					end
+				}}
+				end
+				# if it is php language 
+				@language =Language.find_by("project_id = ? AND language = ?", @project.id, "PHP")
+				if @language.present?
+					version = "#{Rails.root}/public/#{@project.project_name}/composer.json"
+					file = File.read(version)
+					# getting json data
+					data_hash = JSON.parse(file)
+					@language.version = data_hash['require']['php']
+					@language.save
+				end
 				# method for counting lines,words,spaces and letters
 			file_details(@files,@project.id)
 			# creating a pie chart for models,controllers and views
@@ -86,7 +110,6 @@ class ProjectsController < ApplicationController
 	def show
 	@project = Project.find(params[:id])
 
-	@project=Project.find(params[:id])
 		@languages = Language.where(project_id:@project.id)
 		@project_stats = ProjectStat.where(project_id: @project.id)
 		#getting models files list
@@ -138,6 +161,6 @@ class ProjectsController < ApplicationController
 
 	private
 	def project_params
-	params.permit(:name,:url,:models_count,:controllers_count,:views_count)
+	params.permit(:name,:url,:models_count,:controllers_count,:views_count,:user_id)
 	end
 end

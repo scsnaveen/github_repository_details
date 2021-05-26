@@ -7,6 +7,7 @@ class ProjectStatsController < ApplicationController
 		@languages = Language.where(project_id:@project.id)
 		@project_stats = ProjectStat.where(project_id: @project.id)
 
+		# listing files names of models views,controllers
 		model_files = "#{Rails.root}/public/#{@project.project_name}/app/models/**/*"
 		@models = Dir.glob(model_files).select { |e| File.file? e } 
 

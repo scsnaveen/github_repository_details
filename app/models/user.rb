@@ -14,4 +14,5 @@ class User < ApplicationRecord
 		validates :last_name,presence: true,format: { with: /\A[a-zA-Z]+\z/,message: "must be in alphabets " }
 		# validation for phone number
 		validates :phone_number,format: { with: /\A^[6-9]\d{9}$\z/, message: " invalid" },presence: true,:length => { :minimum => 10, :maximum => 15 }
+		has_many :projects
 end

@@ -22,10 +22,20 @@ module RailsAdmin
 					Proc.new do
 						if request.get? # DELETE
 							# redirect_path = admin_checkga_path
+							if current_admin.role =="Super Admin"
+								if current_admin.gauth_enabled == "1"||current_admin.gauth_enabled=="t"
 
-							respond_to do |format|
-								format.html { render @action.template_name }
-								format.js   { render @action.template_name, :layout => false }
+									respond_to do |format|
+										format.html { render @action.template_name }
+										format.js   { render @action.template_name, :layout => false }
+									end
+								else
+									flash[:error]= "Please enable the 2FA"
+									redirect_to index_path
+								end
+							else
+								flash[:error] = "Super Admin can only delete the rows"
+								redirect_to index_path
 							end
 
 						elsif request.delete? # DESTROY
