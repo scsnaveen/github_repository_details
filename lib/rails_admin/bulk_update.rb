@@ -12,6 +12,7 @@ module RailsAdmin
 
 				register_instance_option :controller do
 					proc do
+						# getting rows in bulk
 						@bulk_values = list_entries(@model_config)
 							if request.params['update_value'].present?
 								@bulk_values.update_all(priority: params[:update_value])

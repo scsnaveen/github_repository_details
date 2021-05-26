@@ -3,17 +3,12 @@ class Admin < ApplicationRecord
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :google_authenticatable,:database_authenticatable, :registerable,
-         :recoverable, :rememberable, :validatable,
-         :confirmable, :lockable, :timeoutable, :trackable
-    serialize :roles
+		 :recoverable, :rememberable, :validatable,
+		 :confirmable, :lockable, :timeoutable, :trackable
     def roles_enum
         [ 'Super Admin', 'Admin','Employee'  ]
     end
-    after_initialize :set_default_role, :if => :new_record?
-
-     def set_default_role
-     self.role == "Employee"
-     end
+    
     rails_admin do 
 		edit do 
 			field :role, :enum do

@@ -1,18 +1,18 @@
-<h2><%= 'title' %></h2>
+<h2>Your QR code</h2>
 
 <%= google_authenticator_qrcode(resource) %>
 
 <%= form_for(resource, :as => resource_name, :url => [:refresh, resource_name, :displayqr], :html => {:method => :post}) do |f|%>
-	<p><%= f.submit 'newtoken', {:scope => 'devise.registration'} %></p>
+	<p><%= f.submit 'Generate new token', {:scope => 'devise.registration'} %></p>
 <% end %>
 
 <%= form_for(resource, :as => resource_name, :url => [resource_name, :displayqr], :html => { :method => :put }) do |f| %>
 	<%= render "devise/shared/error_messages", resource: resource %>
-	<h3><%= 'nice_request' %></h3>
-	<p><%= f.label :gauth_enabled, 'qrstatus' %><br />
+	<h3><%= 'Would you like to enable Google Authenticator?' %></h3>
+	<p><%= f.label :gauth_enabled, 'Google Authenticator Status:' %><br />
 	<%= f.check_box :gauth_enabled %></p>
 	<%= f.hidden_field :tmpid, value: @tmpid %>
-	<p><%= f.label :gauth_token,'enter_token' %><br />
+	<p><%= f.label :gauth_token,'Please enter your token to continue' %><br />
 	<%= f.number_field :gauth_token, :autocomplete => :off %>
 
 	<p><%= f.submit 'submit'%></p>

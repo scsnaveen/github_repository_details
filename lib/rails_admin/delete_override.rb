@@ -20,9 +20,10 @@ module RailsAdmin
 
 				register_instance_option :controller do
 					Proc.new do
-						if request.get? # DELETE
-							# redirect_path = admin_checkga_path
+						if request.get? 
+							#checking current admin role  super admin
 							if current_admin.role =="Super Admin"
+								# if gauth enabled or not
 								if current_admin.gauth_enabled == "1"||current_admin.gauth_enabled=="t"
 
 									respond_to do |format|

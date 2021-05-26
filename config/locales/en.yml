@@ -42,3 +42,24 @@ en:
         title: "delete override" 
         breadcrumb: "delete override"
         menu: "delete override"
+  devise:
+    submit_token: "Check Token"
+    submit_token_title: "Please enter your Google Authenticator token:"
+    registration:
+      title: "Your QR Code:"
+      nice_request: "Would you like to enable Google Authenticator?"
+      qrstatus: "Google Authenticator Status:"
+      enter_token: "Please enter your token number to continue"
+      submit: "Continue..."
+      newtoken: "Generate new token"
+    checkga:
+      admin:
+        signed_in: "Signed in successfully from token."
+        error: "Sign in failed"
+    displayqr:
+      admin:
+        status: "User status updated!"
+        newtoken: "You have updated to a new token - make sure you update your Google Authenticator application before continuing!!"
+        disabled: "2FA is currently disabled"
+        enabled: "2FA is currently enabled"
+        invalid_token: "Invalid token"
